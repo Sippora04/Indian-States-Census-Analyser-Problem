@@ -1,6 +1,6 @@
 package censusanalyser;
 
-import java.io.IOException;
+import java.io.*;
 import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -17,7 +17,7 @@ public class StateCensusAnalyser {
             csvToBeanBuilder.withType(CSVStateCensus.class);
             csvToBeanBuilder.withIgnoreLeadingWhiteSpace(true);
             CsvToBean<CSVStateCensus> csvToBean = csvToBeanBuilder.build();
-            Iterator<CSVStateCensus> censusCSVIterator = csvToBean.iterator();;
+            Iterator<CSVStateCensus> censusCSVIterator = csvToBean.iterator();
             int numOfEnteries = 0;
             Iterable<CSVStateCensus> csvIterable = () -> censusCSVIterator;
             numOfEnteries = (int) StreamSupport.stream(csvIterable.spliterator(), false).count();
@@ -26,6 +26,6 @@ public class StateCensusAnalyser {
         	throw new CensusAnalyserException(e.getMessage(), CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM);
         } catch (RuntimeException e) {
         	throw new CensusAnalyserException(e.getMessage(), CensusAnalyserException.ExceptionType.UNABLE_TO_PARSE);
-        } 
+        }
     }
 }
