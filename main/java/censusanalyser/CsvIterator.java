@@ -7,7 +7,8 @@ import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 
 public class CsvIterator {
-
+	
+	//generic method to get CSV iterator
 	<E> Iterator<E> getCsvFileIterator(Reader reader, Class<E> csvClass) {
     	CsvToBeanBuilder<E> csvToBeanBuilder = new CsvToBeanBuilder(reader);
         csvToBeanBuilder.withType(csvClass);

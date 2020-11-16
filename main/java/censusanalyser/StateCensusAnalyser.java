@@ -5,11 +5,13 @@ import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Paths;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.StreamSupport;
 
+import com.google.gson.Gson;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 
@@ -18,7 +20,7 @@ public class StateCensusAnalyser {
 	private static final String PATTERN_FOR_CSV_FILE = "^[a-zA-Z0-9./_@]*[.]+[c][s][v]$"; 
 	
 	public int loadIndiaCensusData(String csvFilePath) throws CensusAnalyserException {
-		// int numOfRecord = 0;
+		 //int numOfRecord = 0;
 		 String extension = getFileExtension(csvFilePath);
 		 if (!Pattern.matches(PATTERN_FOR_CSV_FILE, extension))
 			 throw new CensusAnalyserException(CensusAnalyserException.CensusAnalyserCustomExceptionType.NO_SUCH_TYPE, "No such a type");
@@ -66,12 +68,14 @@ public class StateCensusAnalyser {
 	     return extension;
 	 }
 	 
+	 //counting
 	 private <E> int getCount(Iterator<E> iterator) {
 		 Iterable<E> iterable = () -> iterator;
 	     int recordCount = (int) StreamSupport.stream(iterable.spliterator(), false).count();
 	     return recordCount;
 	 }
-	 
+	
+	 //using generic method to get csv iterator
 	 private <E> Iterator<E> getCsvFileIterator(Reader reader, Class<E> csvClass) {
 		 CsvToBeanBuilder<E> csvToBeanBuilder = new CsvToBeanBuilder(reader);
 	     csvToBeanBuilder.withType(csvClass);
@@ -79,4 +83,27 @@ public class StateCensusAnalyser {
 	     CsvToBean<E> csvToBean = csvToBeanBuilder.build();
 	     return csvToBean.iterator();
 	 }
+	 
+	public String getSortedCensusStateData(String csvFilePath) throws CensusAnalyserException {
+		loadIndiaCensusData(csvFilePath);
+		if (csvFileList == null || csvFileList.size() == 0) {
+			throw new CensusAnalyserException(CensusAnalyserException.CensusAnalyserCustomExceptionType.NO_SUCH_CENSUS_DATA, "Census data not found");
+		}
+		csvFileList.sort(Comparator.comparing(e -> e.getState()));
+		String toJson = new Gson().toJson(csvFileList);
+		return toJson;
+	}
+ 
+	private void sort(List<IndianStateCode> csvFileList, Comparator<IndianStateCode> censusComparator) {
+		for (int i = 0; i < csvFileList.size(); i++) {
+			for (int j = 0; j < csvFileList.size() - i - 1; j++) {
+				IndianStateCode census1 = csvFileList.get(j);
+				IndianStateCode census2 = csvFileList.get(j + 1);
+				if (censusComparator.compare(census1, census2) > 0) {
+					csvFileList.set(j, census2);
+					csvFileList.set(j + 1, census1);
+				}
+			}
+		}
+	}
 }
