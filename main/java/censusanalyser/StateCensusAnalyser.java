@@ -6,14 +6,15 @@ import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
-import java.util.stream.StreamSupport;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import com.google.gson.Gson;
 import com.opencsv.bean.CsvToBean;
@@ -27,7 +28,7 @@ public class StateCensusAnalyser {
 	Map<String, CensusDAO> censusMap = null;
 
 	public StateCensusAnalyser() {
-		this.censusMap = new HashMap();
+		this.censusMap = new HashMap<>();
 		this.censusList = new ArrayList<>();
 	}
 
@@ -137,5 +138,17 @@ public class StateCensusAnalyser {
 			}
 
 		}
+	}
+
+	public String getPopulationWiseSortedCensusData() throws CensusAnalyserException {
+		if (censusList == null || censusList.size() == 0) {
+			throw new CensusAnalyserException(CensusAnalyserException.CensusAnalyserCustomExceptionType.NO_CENSUS_DATA,
+					"No census data");
+		}
+		Comparator<CensusDAO> censusComparator = Comparator.comparing(censusDAO -> censusDAO.population);
+		this.sortCSVData(censusComparator);
+		Collections.reverse(censusList);
+		String sortedStateCensusJson = new Gson().toJson(censusList);
+		return sortedStateCensusJson;
 	}
 }

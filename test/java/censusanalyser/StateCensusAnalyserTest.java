@@ -151,4 +151,17 @@ public class StateCensusAnalyserTest {
             e.printStackTrace();
         }
     }
+    
+    @Test
+    public void givenTheStateCensusData_WhenSortedOnPopulation_ShouldReturnSortedResult() {
+        try {
+        	StateCensusAnalyser censusAnalyser = new StateCensusAnalyser();
+            censusAnalyser.loadIndianStateCodeData(INDIA_CENSUS_CSV_FILE_PATH);
+            String sortedCensusData = censusAnalyser.getPopulationWiseSortedCensusData();
+            IndianStateCode[] stateCSV = new Gson().fromJson(sortedCensusData,IndianStateCode[].class);
+            assertEquals(199812341, stateCSV[0].getPopulation());
+        } catch (CensusAnalyserException e) {
+            e.getStackTrace();
+        }
+    }
 }
