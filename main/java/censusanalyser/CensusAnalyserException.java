@@ -2,13 +2,13 @@ package censusanalyser;
 
 public class CensusAnalyserException extends Exception {
 
-    enum ExceptionType {
-        CENSUS_FILE_PROBLEM, UNABLE_TO_PARSE, NO_SUCH_TYPE, WRONG_DELIMITER_OR_HEADER, FILE_NOT_FOUND
+    public enum CensusAnalyserCustomExceptionType {
+    	FILE_NOT_FOUND, NO_SUCH_FILE_FOUND, NO_SUCH_TYPE, WRONG_DELIMITER_OR_HEADER;
     }
 
-    public ExceptionType type;
+    public CensusAnalyserCustomExceptionType type;
 
-    public CensusAnalyserException(String message, ExceptionType type) {
+    public CensusAnalyserException(CensusAnalyserCustomExceptionType type, String message) {
         super(message);
         this.type = type;
     }
