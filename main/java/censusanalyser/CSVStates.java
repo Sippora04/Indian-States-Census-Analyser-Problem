@@ -44,8 +44,7 @@ public class CSVStates {
         return numOfCount;
 	}
 	
-	//METHOD TO GET EXTENSION OF CSV FILE
-    private static String getFileExtension(String file) {
+	private static String getFileExtension(String file) {
     	String extension = "";
         try {
             if (file != null)

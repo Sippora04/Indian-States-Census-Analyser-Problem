@@ -16,7 +16,6 @@ public class StateCensusAnalyser {
 
 	private static final String PATTERN_FOR_CSV_FILE = "^[a-zA-Z0-9./_@]*[.]+[c][s][v]$"; 
 	
-	//METHOD TO LOAD THE CSV FILE AND GET, for India  Census Data
 	public int loadIndiaCensusData(String csvFilePath) throws CensusAnalyserException {
 		 int numOfRecord = 0;
 		 String extension = getFileExtension(csvFilePath);
@@ -39,7 +38,6 @@ public class StateCensusAnalyser {
 		 return numOfRecord;
 	 }
 	 
-	  //METHOD TO LOAD THE CSV FILE AND GET, for India State Code
 	 public int loadIndianStateCodeData(String csvFilePath) throws CensusAnalyserException {
 		 int numOfRecord = 0;
 		 String extension = getFileExtension(csvFilePath);
@@ -58,7 +56,6 @@ public class StateCensusAnalyser {
 		 return numOfRecord;
 	 }
 	 
-	//METHOD TO GET EXTENSION OF CSV FILE
 	 private static String getFileExtension(String file) {
 		 String extension = "";
 		 try {
@@ -70,14 +67,12 @@ public class StateCensusAnalyser {
 	     return extension;
 	 }
 	 
-	 //TO COUNT THE RECORDS
 	 private <E> int getCount(Iterator<E> iterator) {
 		 Iterable<E> iterable = () -> iterator;
 	     int recordCount = (int) StreamSupport.stream(iterable.spliterator(), false).count();
 	     return recordCount;
 	 }
 	 
-	//GENERIC METHOD TO GET CSV ITERATOR
 	 private <E> Iterator<E> getCsvFileIterator(Reader reader, Class<E> csvClass) {
 		 CsvToBeanBuilder<E> csvToBeanBuilder = new CsvToBeanBuilder(reader);
 	     csvToBeanBuilder.withType(csvClass);
