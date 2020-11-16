@@ -4,6 +4,10 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
+import censusanalyser.CSVStates;
+import censusanalyser.StateCensusAnalyser;
+import censusanalyser.CensusAnalyserException;
+
 public class StateCensusAnalyserTest {
 
     private static final String INDIA_CENSUS_CSV_FILE_PATH = "C:/Users/sippo/eclipse-workspace/CensusAnalyserProblem/resources/IndiaStateCensusData.csv";
@@ -80,7 +84,7 @@ public class StateCensusAnalyserTest {
         assertEquals(37, numberOfRecord);
     }
     
-  //TEST CASE 2.2
+  //Test Case 2.2
     @Test
     public void givenIndianStateCodeCsvFile_WhenImproper_ShouldThrowException() {
         try {
