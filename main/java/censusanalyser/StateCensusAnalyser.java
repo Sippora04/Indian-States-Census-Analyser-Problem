@@ -124,6 +124,16 @@ public class StateCensusAnalyser {
 		String sortedStateCensusJson = new Gson().toJson(censusList);
 		return sortedStateCensusJson;
 	}
+	
+	public String getSortedStateCodeData() throws CensusAnalyserException {
+        if (censusList == null || censusList.size() == 0) {
+            throw new CensusAnalyserException(CensusAnalyserException.CensusAnalyserCustomExceptionType.NO_SUCH_CENSUS_DATA, "Census state code data not found");
+        }
+        Comparator<CensusDAO> stateCodeComparator = Comparator.comparing(censusDAO -> censusDAO.stateCode);
+        this.sortCSVData(stateCodeComparator);
+        String sortedStateCodeJson = new Gson().toJson(censusList);
+        return sortedStateCodeJson;
+    }
 
 	private void sortCSVData(Comparator<CensusDAO> csvComparator) {
 		for (int i = 0; i < censusList.size() - 1; i++) {
@@ -136,7 +146,6 @@ public class StateCensusAnalyser {
 				}
 
 			}
-
 		}
 	}
 
@@ -151,4 +160,16 @@ public class StateCensusAnalyser {
 		String sortedStateCensusJson = new Gson().toJson(censusList);
 		return sortedStateCensusJson;
 	}
+	
+	//method to sort state census data by population density
+	public String getPopulationDensityWiseSortedCensusData() throws CensusAnalyserException {
+        if (censusList == null || censusList.size() == 0) {
+            throw new CensusAnalyserException(CensusAnalyserException.CensusAnalyserCustomExceptionType.NO_CENSUS_DATA, "No census data");
+        }
+        Comparator<CensusDAO> censusComparator = Comparator.comparing(censusDAO -> censusDAO.densityPerSqKm);
+        this.sortCSVData(censusComparator);
+        Collections.reverse(censusList);
+        String sortedStateCensusJson = new Gson().toJson(censusList);
+        return sortedStateCensusJson;
+    }
 }

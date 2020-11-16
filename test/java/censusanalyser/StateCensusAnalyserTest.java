@@ -164,4 +164,17 @@ public class StateCensusAnalyserTest {
             e.getStackTrace();
         }
     }
+    
+    @Test
+    public void givenTheStateCensusData_WhenSortedOnDensityPerSqKm_ShouldReturnSortedResult() {
+        try {
+        	StateCensusAnalyser censusAnalyser = new StateCensusAnalyser();
+            censusAnalyser.loadIndiaCensusData(INDIA_CENSUS_CSV_FILE_PATH);
+            String sortedCensusData = censusAnalyser.getPopulationDensityWiseSortedCensusData();
+            CensusDAO[] censusCSV = new Gson().fromJson(sortedCensusData, CensusDAO[].class);
+            assertEquals(1102, censusCSV[0].densityPerSqKm);
+        } catch (CensusAnalyserException e) {
+            e.getStackTrace();
+        }
+    }
 }
